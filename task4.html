@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #container{
+            text-align: center;
+        }
+        #screan{
+            width:100%;
+            height:200px;
+            position: relative;
+        }
+        #screan a{
+            display: inline-block;
+            background-color: red;
+            margin:0 0;
+            padding:0 0;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <input id="txt" type="text">
+    <input id="push" type="button" value="左侧进入">
+    <input id="pull" type="button" value="右侧进入">
+    <input id="deleteleft" type="button" value="删除左侧">
+    <input id="deleteright" type="button" value="删除右侧">
+</div>
+<div id="screan"></div>
+<script>
+    function getstyle(obj,attr){
+        return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj)[attr];}
+        //    获取非行间样式
+    function doMove(id,derection,speed,subjectPosition){
+    //id:要运动的元素；derection:以什么方向为参照来运动（left、right、top、bottom）;speed:计时器每循环一次移动的距离；subjectPosition：运动所要达到的样式的值
+        speed= parseInt(getstyle(id,derection))> subjectPosition? -speed : speed;//判断运动的方向
+        clearInterval(id.timer);
+        id.timer=setInterval(function(){
+        var nowPosition =parseInt(getstyle(id,derection));
+        var thisPosition=nowPosition+speed;
+        if(thisPosition>=subjectPosition&&speed>0||thisPosition<=subjectPosition&&speed<0){
+            //判断有无达到目标点
+            thisPosition=subjectPosition;
+            clearInterval(id.timer);
+        }
+            id.style[derection]=thisPosition+'px';
+        },30)
+}
+    function creatA(element,txt,parentElement){
+        var a=document.createElement(element);
+        a.href="javascript:void(0)";
+        var aTxt=document.createTextNode(txt);
+        a.appendChild(aTxt);
+        parentElement.appendChild(a);
+        return a;
+    }
+    function aClick(a){
+        var aLeft=parseInt(a.style.left);
+        var aWidth= parseInt(a.offsetWidth);
+        var screanA=screan.getElementsByTagName("a");
+        screan.removeChild(a);
+        for(var i=0;i<screanA.length;i++){
+            if(parseInt(screanA[i].style.left)<aLeft){
+            }
+            else{
+                doMove(screanA[i],"left",1,parseInt(screanA[i].style.left)-aWidth);
+            }
+        }
+    }
+
+    //创建元素
+    var txt=document.getElementById("txt");
+    var pushBtn=document.getElementById("push");
+    var pullBtn=document.getElementById("pull");
+    var dlBtn=document.getElementById("deleteleft");
+    var drBtn=document.getElementById("deleteright");
+    var screan=document.getElementById("screan");
+//右侧进入
+    pullBtn.onclick=function push(){
+        var numl=0;
+        //将numl声明在全局作用域中问题很大
+        if (txt.value==""||isNaN(txt.value)) {/*isNaN函数若参数中没有数字返回false有则true*/
+            alert("请输入数字");
+            return false;
+        }
+        var a=creatA("a",txt.value,screan);
+        a.style.position="absolute";
+        a.style.left=window.innerWidth+"px";
+        var currentA=screan.getElementsByTagName("a");
+        if(currentA.length==1){
+            numl=0;
+        }
+        else{
+            for(var i=1;i<currentA.length;i++){
+                numl=numl+currentA[i-1].clientWidth+5;
+//                console.log(currentA[i].clientWidth);
+            }
+        }
+        //获取元素停留位置
+        doMove(a,"left",10,numl);
+        //运动
+        //给A添加事件
+        a.onclick=function(){
+            aClick(a);
+        }
+    };
+    //左侧进入
+    pushBtn.onclick=function(){
+        if (txt.value==""||isNaN(txt.value)) {
+            alert("请输入数字");
+            return false;
+        }
+        var everyA=document.getElementsByTagName("a");
+        var a=document.createElement("a");
+        a.href="javascript:void(0)";
+        var aTxt=document.createTextNode(txt.value);
+        a.appendChild(aTxt);
+        screan.insertBefore(a,everyA[0]);
+        //创建元素并插入到第一个
+        var afterInsert=document.getElementsByTagName("a");
+        var pushWidth= a.offsetWidth;
+        a.style.position="absolute";
+        a.style.left=-1000+"px";
+//        doMove(a,"left",1,-2);
+        //定位
+        for(let i= 1;i<everyA.length;i++){
+            doMove(afterInsert[i],"left",1,parseInt(afterInsert[i].style.left)+pushWidth);
+        }
+        setTimeout(function(){
+            doMove(a,"left",300,0);
+        },1000);
+        //给A添加事件
+        a.onclick=function(){
+            aClick(a);
+        }
+    };
+//删除左侧
+    dlBtn.onclick=function(){
+        var afterdlA=screan.getElementsByTagName("a");
+        if(afterdlA.length==0){
+            alert("请输入数字");
+        }
+        var long=parseInt(afterdlA[0].offsetWidth);
+        screan.removeChild(afterdlA[0]);
+        for(let i=0;i<afterdlA.length;i++){
+            doMove(afterdlA[i],"left",1,parseInt(afterdlA[i].style.left)-long);
+        }
+    };
+    //删除右侧
+    drBtn.onclick=function(){
+        var drBtnA=screan.getElementsByTagName("a");
+        if(drBtnA.length==0){
+            alert("请输入数字");
+        }
+        screan.removeChild(drBtnA[drBtnA.length-1]);
+    };
+    
+
+</script>
+</body>
+</html>
