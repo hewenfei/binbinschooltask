@@ -77,6 +77,10 @@
     var dlBtn=document.getElementById("deleteleft");
     var drBtn=document.getElementById("deleteright");
     var screan=document.getElementById("screan");
+
+
+
+
 //右侧进入
     pullBtn.onclick=function push(){
         var numl=0;
@@ -106,6 +110,11 @@
             aClick(a);
         }
     };
+
+
+
+
+
     //左侧进入
     pushBtn.onclick=function(){
         if (txt.value==""||isNaN(txt.value)) {
@@ -136,6 +145,11 @@
             aClick(a);
         }
     };
+
+
+
+
+
 //删除左侧
     dlBtn.onclick=function(){
         var afterdlA=screan.getElementsByTagName("a");
@@ -147,7 +161,13 @@
         for(let i=0;i<afterdlA.length;i++){
             doMove(afterdlA[i],"left",1,parseInt(afterdlA[i].style.left)-long);
         }
+        alert(txt.value);
     };
+
+
+
+
+
     //删除右侧
     drBtn.onclick=function(){
         var drBtnA=screan.getElementsByTagName("a");
@@ -155,6 +175,7 @@
             alert("请输入数字");
         }
         screan.removeChild(drBtnA[drBtnA.length-1]);
+        alert(txt.value);
     };
     
 
