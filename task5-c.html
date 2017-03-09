@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>任务四</title>
+    <style>
+        #display{
+            position: absolute;
+            top: 100px;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .ele{
+            text-align: center;
+            color: #fff;
+            float: left;
+            margin-left: 10px;
+            width:20px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+<input type="text" id="intbox" placeholder="请输入数字" autofocus>
+<input type="button" class="butt" fType='left_in' value="左侧入">
+<input type="button" class="butt" fType="right_in" value="右侧入">
+<input type="button" class="butt" fType="left_out" value="左侧出">
+<input type="button" class="butt" fType="right_out" value="右侧出">
+<input type="button" class="butt" fType="sort_smtobg" value="正序排列">
+<input type="button" class="butt" fType="sort_bgtosm" value="逆序排列">
+<div id="display"></div>
+
+<script>
+    var arr = [];
+    //给各个button添加监听事件
+    (function main(){
+        var list = document.getElementsByClassName('butt');
+        for(var i = 0,len = list.length; i<len; i++){
+            list[i].addEventListener('click',click_Evt);
+        }
+        document.getElementById("display").addEventListener('click',del)
+    })();
+
+    function click_Evt()
+    {
+        var fType = this.getAttribute('fType');
+        var ele = document.getElementById('intbox').value;
+        //判断点击和输入是否正确
+        if((ele<10||ele>100||isNaN(ele))&&(fType=="left_in"&&fType=="right_in"))
+        {
+            console.log(ele);alert("请输入10-100的数字");clear_input(); return false
+        }
+        if(arr.length>60)
+        {
+            alert("输入限制"); return false;
+        }
+        {
+            switch (fType) {
+                case 'left_in':
+                    arr.unshift(ele);
+                    break;
+                case 'right_in':
+                    arr.push(ele);
+                    break;
+                case 'left_out':
+                    arr.shift();
+                    break;
+                case 'right_out':
+                    arr.pop();
+                    break;
+                case 'sort_smtobg':
+                    arr.sort(function(a,b){
+                        return a-b;
+                    });
+                    break;
+                case 'sort_bgtosm':
+                    arr.sort(function(a,b){
+                        return b-a;
+                    });
+                    break;
+                default:
+                    break;
+            }
+
+            showArray();//显示数据
+            clear_input();//清除输入框的内容，并使其重新获得焦点
+        }
+    }
+    function clear_input (){
+        document.getElementById('intbox').value = '';
+        document.getElementById('intbox').focus();
+    }
+    function showArray(){
+        var tpl = '';
+        arr.forEach(function(ele,index){
+            tpl += "<div style=\"height:"+ele*3+"px\"; class = 'ele' ele_ind = '"+index+"'>"+ele+"</div>";
+        });
+        document.getElementById('display').innerHTML = tpl;
+//        for(var i=0;i<arr.length;i++){
+//            tpl+="<div style=\"height:"+arr[i]*3+"px\"; class = 'ele' ele_ind = '"+i+"'>"+arr[i]+"</div>";
+//        }
+//        document.getElementById('display').innerHTML = tpl;
+    }
+    //删除函数
+    function del(e) {
+        var e =e||window.event;
+        var t = e.target; //返回触发事件的元素
+        var ele_ind = t.getAttribute('ele_ind');
+        arr.splice(ele_ind,1)
+        showArray(arr)
+    }
+
+</script>
+
+</body>
+</html>

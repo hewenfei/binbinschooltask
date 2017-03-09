@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>task5</title>
+    <style>
+        #container{
+            text-align: center;
+        }
+        #screan{
+            width:100%;
+            height:200px;
+        }
+        #screan li{
+            width: 80px;
+            height:80px;
+            background-color: red;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <input id="txt" type="text">
+    <input id="leftL" type="button" value="左侧进入">
+    <input id="rightL" type="button" value="右侧进入">
+    <input id="deleteleft" type="button" value="删除左侧">
+    <input id="deleteright" type="button" value="删除右侧">
+</div>
+    <div>
+        <ul id="screan"></ul>
+    </div>
+<script>
+    var task=function(){
+        var txt=document.getElementById("txt");
+        var leftL=document.getElementById("leftL");
+        var rightL=document.getElementById("rightL");
+        var deleteLeft=document.getElementById("deleteleft");
+        var deleteRight=document.getElementById("deleteright");
+        var screan=document.getElementById("screan");
+//        function addEvent(){
+//            var li_group=screan.getElementsByTagName("li");
+//            for(var i=0;i<li_group.length;i++){
+//                li_group[i].addEventListener("click",removeLi())
+//            }
+//        }
+        function removeLi(){
+
+        }
+
+    }
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>任务四</title>
+    <style>
+        #display{
+            position: absolute;
+            top: 100px;
+        }
+
+        .ele{
+            text-align: center;
+            line-height: 40px;
+            color: #fff;
+            float: left;
+            margin-left: 10px;
+            width: 40px;
+            height: 40px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+<input type="number" id="intbox" placeholder="请输入数字" autofocus>
+<input type="button" class="butt" fType='left_in' value="左侧入">
+<input type="button" class="butt" fType="right_in" value="右侧入">
+<input type="button" class="butt" fType="left_out" value="左侧出">
+<input type="button" class="butt" fType="right_out" value="右侧出">
+<div id="display"></div>
+
+<script>
+    var arr = [];
+    //给各个button添加监听事件
+    (function main(){
+        var list = document.getElementsByClassName('butt');
+        for(var i = 0,len = list.length; i<len; i++){
+            list[i].addEventListener('click',click_Evt);
+        }
+        document.getElementById("display").addEventListener('click',del)
+    })();
+
+    function click_Evt(){
+        //console.log(this);
+        var fType = this.getAttribute('fType');
+        var ele = document.getElementById('intbox').value;
+        switch(fType){
+            case 'left_in':
+                arr.unshift(ele);
+                break;
+            case 'right_in':
+                arr.push(ele);
+                break;
+            case 'left_out':
+                arr.shift();
+                break;
+            case 'right_out':
+                arr.pop();
+                break;
+            default:
+                break;
+        }
+        clear_input();			//清除输入框的内容，并使其重新获得焦点
+        showArray();			//显示数据
+    }
+    function clear_input (){
+        document.getElementById('intbox').value = '';
+        document.getElementById('intbox').focus();
+    }
+    function showArray(){
+        var tpl = '';
+        arr.forEach(function(ele,index){
+            tpl += "<div class = 'ele' ele_ind = '"+index+"'>"+ele+"</div>";
+        })
+        document.getElementById('display').innerHTML = tpl;
+    }
+    //删除函数
+    function del(e){
+        var e =e||window.event;
+        var t = e.target;
+        var ele_ind = t.getAttribute('ele_ind');
+        arr.splice(ele_ind,1)
+        showArray(arr)
+    }
+
+</script>
+
+</body>
+</html>
