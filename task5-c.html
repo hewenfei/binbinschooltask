@@ -22,7 +22,7 @@
     </style>
 </head>
 <body>
-<input type="text" id="intbox" placeholder="请输入数字" autofocus>
+<input type="number" id="intbox" placeholder="请输入数字" autofocus>
 <input type="button" class="butt" fType='left_in' value="左侧入">
 <input type="button" class="butt" fType="right_in" value="右侧入">
 <input type="button" class="butt" fType="left_out" value="左侧出">
@@ -47,7 +47,7 @@
         var fType = this.getAttribute('fType');
         var ele = document.getElementById('intbox').value;
         //判断点击和输入是否正确
-        if((ele<10||ele>100||isNaN(ele))&&(fType=="left_in"&&fType=="right_in"))
+        if(((ele<10||ele>100)&&isNaN(ele))&&(fType=="left_in"&&fType=="right_in"))
         {
             console.log(ele);alert("请输入10-100的数字");clear_input(); return false
         }
@@ -58,10 +58,28 @@
         {
             switch (fType) {
                 case 'left_in':
-                    arr.unshift(ele);
+                    if(arr.length>=60){
+                        alert("输入已达最大值")
+                    }else{
+                        if(ele>=10 && ele<=100){
+                            arr.unshift(ele);
+                        }
+                        else{
+                            alert("输入的内容不在范围内")
+                        }
+                    }
                     break;
                 case 'right_in':
-                    arr.push(ele);
+                    if(arr.length>=60){
+                        alert("输入已达最大值")
+                    }else{
+                        if(ele>=10 && ele<=100){
+                            arr.push(ele);
+                        }
+                        else{
+                            alert("输入的内容不在范围内")
+                        }
+                    }
                     break;
                 case 'left_out':
                     arr.shift();
