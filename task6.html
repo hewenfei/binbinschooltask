@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>任务四</title>
+    <style>
+        #display{
+            position: absolute;
+            top: 100px;
+        }
+
+        .ele{
+            text-align: center;
+            line-height: 40px;
+            color: #fff;
+            float: left;
+            margin-left: 10px;
+            width: 40px;
+            height: 40px;
+            background-color: red;
+        }
+        .match{
+            border: 2px #000000 solid;
+        }
+    </style>
+</head>
+<body>
+<!--<input type="number" id="intbox" placeholder="请输入数字" autofocus>-->
+<textarea id="intbox" placeholder="数字/字母/中文" autofocus></textarea>
+<input type="button" class="butt" fType='left_in' value="左侧入">
+<input type="button" class="butt" fType="right_in" value="右侧入">
+<input type="button" class="butt" fType="left_out" value="左侧出">
+<input type="button" class="butt" fType="right_out" value="右侧出">
+<input id="search" type="button" class="btn" fType="search_txt" value="匹配">
+<div id="display"></div>
+
+<script>
+    var arr = [];
+    //给各个button添加监听事件
+    (function main(){
+        var list = document.getElementsByClassName('butt');
+        for(var i = 0,len = list.length; i<len; i++){
+            list[i].addEventListener('click',click_Evt);
+        }
+        document.getElementById("display").addEventListener('click',del);
+        document.getElementById("search").addEventListener('click',searchTxt);
+    })();
+    //事件函数
+    function click_Evt(){
+        //console.log(this);
+        var fType = this.getAttribute('fType');
+        var ele = document.getElementById('intbox').value;
+        var arrEle=divisionText(ele);
+        switch(fType){
+            case 'left_in':
+                for(var i=0;i<arrEle.length;i++) {
+                    arr.unshift(arrEle[i]);
+                }
+                break;
+            case 'right_in':
+                for(var i=0;i<arrEle.length;i++) {
+                    arr.push(arrEle[i]);
+                }
+                break;
+            case 'left_out':
+                arr.shift();
+                break;
+            case 'right_out':
+                arr.pop();
+                break;
+            default:
+                break;
+        }
+        clear_input();			//清除输入框的内容，并使其重新获得焦点
+        showArray();            //显示数据
+
+    }
+    //字符串操作，将字符串转为数组
+    function divisionText(str){
+        var parttern=/[^0-9a-zA-Z\u4e00-\u9fa5]+/g;
+        var arrEle=str.split(parttern).filter(function(e) {
+            if (e != null && e.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return arrEle;
+//        for(var i=0;i<arrEle.length;i++){
+//            arr.push(arrEle[i]);
+//        }
+    }
+    //清除输入
+    function clear_input (){
+        document.getElementById('intbox').value = '';
+        document.getElementById('intbox').focus();
+    }
+    //将数据显示出来
+    function showArray(){
+        var tpl = '';
+        arr.forEach(function(ele,index){
+            tpl += "<div class = 'ele' ele_ind = '"+index+"'>"+ele+"</div>";
+        })
+        document.getElementById('display').innerHTML = tpl;
+    }
+    //删除函数
+    function del(e){
+        var e =e||window.event;
+        var t = e.target;
+        var ele_ind = t.getAttribute('ele_ind');
+        arr.splice(ele_ind,1)
+        showArray(arr)
+    }
+    //匹配，和显示函数差不多，多一个判断
+    function searchTxt(){
+        var txt = document.getElementById('intbox').value;
+        var tpl = '';
+        arr.forEach(function(ele,index){
+            if(ele.toString().search(txt)!==-1){
+                tpl += "<div class = 'ele match' ele_ind = '"+index+"'>"+ele+"</div>";
+            }else{
+            tpl += "<div class = 'ele' ele_ind = '"+index+"'>"+ele+"</div>";
+        }
+        })
+        document.getElementById('display').innerHTML = tpl;
+        clear_input();
+
+    }
+
+</script>
+
+</body>
+</html>
