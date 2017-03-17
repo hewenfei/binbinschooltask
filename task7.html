@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        div{
+            border:solid 1px #b9def0;
+            padding:8px 5px;;
+            margin:2px;
+            background-color: #ffffff;
+        }
+        #container{
+            width:500px;
+            height: 100px;
+            display: flex;
+            justify-content:center;
+            align-items:center;
+            flex-wrap:wrap;
+        }
+        .root{
+            width:230px;
+            height:85px;
+            display: flex;
+            justify-content:center;
+            align-items:center;
+            flex-wrap:wrap;
+        }
+        .branch{
+            width:90px;
+            height:75px;
+            display: flex;
+            justify-content:center;
+            align-items:center;
+
+        }
+        .leaf{
+            width:30px;
+            height:50px;
+
+        }
+        .bk{
+            background-color: red;;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div class="root">
+            <div class="branch">
+                <div class="leaf">1</div>
+                <div class="leaf">2</div>
+            </div>
+            <div class="branch">
+                <div class="leaf">3</div>
+                <div class="leaf">4</div>
+            </div>
+        </div>
+        <div class="root">
+            <div class="branch">
+                <div class="leaf">5</div>
+                <div class="leaf">6</div>
+            </div>
+            <div class="branch">
+                <div class="leaf">7</div>
+                <div class="leaf">8</div>
+            </div>
+        </div>
+
+    </div>
+    <input data-type="btn1" class="btn" type="button" value="先序排列">
+    <input data-type="btn2" class="btn" type="button" value="中序排列">
+    <input data-type="btn3" class="btn" type="button" value="后序排列">
+<script>
+    var arr=[];
+    (function(){
+        var list=document.getElementsByClassName("btn");
+        for(var i=0;i<list.length;i++){
+            list[i].addEventListener("click",clickEvent);
+        }
+    })();
+    function clickEvent(){
+        var cont=document.getElementById("container");
+        var type=this.dataset.type;
+        switch(type){
+            case 'btn1':
+                    preorderTraversal(cont);
+                    show();
+                break;
+            case 'btn2':
+                    inorderTraversal(cont);
+                    show();
+                break;
+            case 'btn3':
+                    postorderTraversal(cont);
+                    show();
+                break;
+            default:
+                break;
+        }
+
+    }
+//
+    function preorderTraversal(node){
+        if(node) {
+            arr.push(node);
+            preorderTraversal(node.firstElementChild);
+            preorderTraversal(node.lastElementChild);
+
+        }
+    }
+    function inorderTraversal(node){
+        if(node){
+            inorderTraversal(node.firstElementChild);
+            arr.push(node);
+            inorderTraversal(node.lastElementChild);
+
+        }
+    }
+    function postorderTraversal(node){
+        if(node){
+            postorderTraversal(node.firstElementChild);
+            postorderTraversal(node.lastElementChild);
+            arr.push(node);
+        }
+    }
+    function show(){
+        for(let i=0;i<=arr.length;i++){
+            setTimeout(function(){
+                if(i==0) {}
+                else
+                {
+                    arr[i - 1].style.backgroundColor = "white";
+                }
+                if(i<arr.length) {
+                    arr[i].style.backgroundColor = "red";
+                }
+            },i*500)
+        }
+        setTimeout(function(){
+            arr=[];
+        },500*arr.length)
+    }
+</script>
+</body>
+</html>
