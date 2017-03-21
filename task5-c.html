@@ -123,9 +123,11 @@
     //删除函数
     function del(e) {
         var e =e||window.event;
+        console.log(e);
         var t = e.target; //返回触发事件的元素
+        console.log(t);
         var ele_ind = t.getAttribute('ele_ind');
-        arr.splice(ele_ind,1)
+        arr.splice(ele_ind,1);
         showArray(arr)
     }
 

@@ -83,6 +83,10 @@
     function clickEvent(){
         var cont=document.getElementById("container");
         var type=this.dataset.type;
+        if(arr.length){
+            alert("正在遍历");
+            return false;
+        }
         switch(type){
             case 'btn1':
                     preorderTraversal(cont);
