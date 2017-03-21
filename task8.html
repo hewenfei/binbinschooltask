@@ -6,6 +6,7 @@
     <style>
         #father{
             height:300px;
+            font-size:.5em;
         }
         div{
             border:solid 1px #b9def0;
@@ -98,6 +99,7 @@
 <input data-type="btn1" class="btn" type="button" value="先序排列">
 <input data-type="btn2" class="btn" type="button" value="中序排列">
 <input data-type="btn3" class="btn" type="button" value="后序排列">
+<input id="txt" type="text" placeholder="查找">
 <script>
     //设置父元素宽度
     function fatherWidth(){
@@ -114,6 +116,7 @@
     var arr=[];
     (function(){
         var list=document.getElementsByClassName("btn");
+        var txt=document.getElementById("txt");
         for(var i=0;i<list.length;i++){
             list[i].addEventListener("click",clickEvent);
         }
@@ -152,7 +155,17 @@
             }
         }
     }
-    function inorderTraversal(node){
+    function inorderTraversal(root){
+             //NodeIterator内置遍历方法优点在于节点的筛选，filter是筛选方法
+            /*var filter= function(node){
+                    return node.tagName.toLowerCase()=="div"? NodeFilter.FILTER_ACCEPT: NodeFilter.FILTER_SKIP;
+            };
+            var iterator=document.createNodeIterator(document.getElementById("father"),NodeFilter.SHOW_ELEMENT,filter,false);
+            var node=iterator.nextNode();
+            while(node!==null){
+                arr.push(node);
+                node=iterator.nextNode();
+            }*/
 
     }
     //后序遍历
@@ -167,16 +180,30 @@
     function show(){
         for(let i=0;i<=arr.length;i++){
             setTimeout(function(){
-                if(i==0) {}
+                if(i==0) {
+                }
                 else
                 {
                     arr[i - 1].style.backgroundColor = "white";
                 }
+                //匹配文本
+                if(i>1) {
+                    if (arr[i - 1].children[0].innerHTML == txt.value) {
+                        arr[i - 1].style.backgroundColor = "yellow";
+                        for (var j = i - 1; j <= arr.length; j++) {
+                            clearTimeout(j);
+                        }
+                        alert("已匹配");
+                        return false;
+                    }
+                }
                 if(i<arr.length) {
                     arr[i].style.backgroundColor = "red";
                 }
+
             },i*500)
         }
+        //清空数组
         setTimeout(function(){
             arr=[];
         },500*arr.length)
