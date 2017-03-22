@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #father{
+            height:300px;
+            font-size:.5em;
+        }
+        div{
+            border:solid 1px #b9def0;
+            background-color: #ffffff;
+            display:flex;
+            justify-content: flex-start;
+            -webkit-justify-content:flex-start;
+            align-items:center;
+            padding-left: 10px;
+            padding-right: 10px;;
+            height:70%;
+            flex-wrap: nowrap;
+            text-align: start;;
+        }
+        span{
+            align-self: flex-start;
+        }
+
+
+        .bk{
+            background-color: red;;
+        }
+        .click{
+            border:1px solid black;
+        }
+    </style>
+</head>
+<body>
+<div id="father">
+    <span>container</span>
+    <div>
+        <span>root1</span>
+        <div>
+            <span>branch1</span>
+            <div>
+                <span>leaf1</span>
+            </div>
+            <div>
+                <span>leaf2</span>
+            </div>
+            <div>
+                <span>leaf3</span>
+            </div>
+            <div>
+                <span>leaf4</span>
+            </div>
+        </div>
+        <div>
+            <span>branch1.2</span>
+        </div>
+        <div>
+            <span>branch1.3</span>
+            <div>
+                <span>leaf1.3.1</span>
+            </div>
+            <div>
+                <span>leaf1.3.2</span>
+            </div>
+        </div>
+    </div>
+    <div>
+        <span>root2</span>
+        <div>
+            <span>branch2.1</span>
+            <div>
+                <span>leaf2.1.1</span>
+            </div>
+            <div>
+                <span>leaf2.1.2</span>
+            </div>
+            <div>
+                <span>leaf2.1.3</span>
+            </div>
+        </div>
+        <div>
+            <span>branch2.2</span>
+            <div>
+                <span>leaf2.2.1</span>
+                <div>
+                    <span>leafleaf</span>
+                </div>
+            </div>
+            <div>
+                <span>leaf2.2..2</span>
+            </div>
+        </div>
+    </div>
+    <div>
+        <span>root3</span>
+    </div>
+</div>
+<input data-type="btn1" class="btn" type="button" value="先序排列">
+<input data-type="btn2" class="btn" type="button" value="中序排列">
+<input data-type="btn3" class="btn" type="button" value="后序排列">
+<input id="txt" type="text" placeholder="查找"><br>
+<input data-type="btn4" class="btn" type="button" value="删除">
+<input id="txt2" type="text" placeholder="请输入添加内容">
+<input data-type="btn5" class="btn" type="button" value="添加">
+<script>
+    //设置父元素宽度
+    function fatherWidth(){
+        var father=document.getElementById("father");
+        var zeroComputedStyle=document.defaultView.getComputedStyle(father.children[0],null);
+        var firstComputedStyle=document.defaultView.getComputedStyle(father.children[1],null);
+        var secondComputedStyle=document.defaultView.getComputedStyle(father.children[2],null);
+        var thirdComputedStyle=document.defaultView.getComputedStyle(father.children[3],null);
+        var width=parseInt(zeroComputedStyle.width)+parseInt(firstComputedStyle.width)+parseInt(secondComputedStyle.width)+parseInt(thirdComputedStyle.width);
+        father.style.width=width+100+"px";
+    }
+    fatherWidth();
+
+    var arr=[];
+    var element;
+    //添加点击事件
+    (function(){
+        var list=document.getElementsByClassName("btn");
+        var txt=document.getElementById("txt");
+        for(var i=0;i<list.length;i++){
+            list[i].addEventListener("click",clickEvent);
+        }
+
+    })();
+    //点击事件
+    function clickEvent(){
+        var cont=document.getElementById("father");
+        var type=this.dataset.type;
+        if(arr.length){
+            alert("正在遍历");
+            return false;
+        }
+        switch(type){
+            case 'btn1':
+                preorderTraversal(cont);
+                show();
+                break;
+            case 'btn2':
+                inorderTraversal(cont);
+                show();
+                break;
+            case 'btn3':
+                postorderTraversal(cont);
+                show();
+                break;
+            case 'btn4':
+                element.parentNode.removeChild(element);
+                break;
+            case 'btn5':
+                addChild();
+                break;
+            default:
+                break;
+        }
+
+    }
+    //先序遍历
+    function preorderTraversal(node){
+        if(node) {
+            arr.push(node);
+            for(var i=1;i<=node.children.length;i++) {;
+                preorderTraversal(node.children[i]);
+            }
+        }
+    }
+    function inorderTraversal(root){
+        //NodeIterator内置遍历方法优点在于节点的筛选，filter是筛选方法
+        /*var filter= function(node){
+         return node.tagName.toLowerCase()=="div"? NodeFilter.FILTER_ACCEPT: NodeFilter.FILTER_SKIP;
+         };
+         var iterator=document.createNodeIterator(document.getElementById("father"),NodeFilter.SHOW_ELEMENT,filter,false);
+         var node=iterator.nextNode();
+         while(node!==null){
+         arr.push(node);
+         node=iterator.nextNode();
+         }*/
+
+    }
+    //后序遍历
+    function postorderTraversal(node){
+        if(node) {
+            for(var i=1;i<=node.children.length;i++) {
+                postorderTraversal(node.children[i]);
+            }
+            arr.push(node);
+        }
+    }
+    //添加操作
+    function addChild(){
+        var txt=document.getElementById("txt2").value;
+        var Div=document.createElement("div");
+        Div.innerHTML="<span>"+txt+"</span>";
+        element.appendChild(Div);
+    }
+    //显示函数
+    function show(){
+        for(let i=0;i<=arr.length;i++){
+            setTimeout(function(){
+                if(i==0) {
+                }
+                else
+                {
+                    arr[i - 1].style.backgroundColor = "white";
+                }
+                //匹配文本
+                if(i>1) {
+                    if (arr[i - 1].children[0].innerHTML == txt.value) {
+                        arr[i - 1].style.backgroundColor = "yellow";
+                        for (var j = i - 1; j <= arr.length; j++) {
+                            clearTimeout(j);
+                        }
+                        alert("已匹配");
+                        return false;
+                    }
+                }
+                if(i<arr.length) {
+                    arr[i].style.backgroundColor = "red";
+                }
+
+            },i*500)
+        }
+        //清空数组
+        setTimeout(function(){
+            arr=[];
+        },500*arr.length)
+    }
+    //设置元素点击事件
+    (function(){
+        var cont=document.getElementById("father");
+        cont.addEventListener("click",function (e){
+            var e=e||window.event;
+            if(element){
+                element.removeAttribute("class");
+            }
+            element= e.target;
+            element.className="click";
+        })
+    })();
+</script>
+</body>
+</html>
